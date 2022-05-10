@@ -238,29 +238,14 @@ class UserController{
     selectAll(){
         // let users = User.getUsersStorage();
 
-        let ajax = new XMLHttpRequest();
-
-        ajax.open('GET','/users');
-
-        ajax.onload = event =>{
-        
-            let obj = {users:[]};
-
-            try {
-                obj = JSON.parse(ajax.responseText);
-            } catch (error) {
-              console.error(error);
-            }
-        
-            obj.users.forEach(dataUser=>{
+        HttpRequest.get('/users').then(data=>{
+            data.users.forEach(dataUser=>{
                 let user = new User();
     
                 user.loadFromJson(dataUser);
                 this.addLine(user);
             })
-    
-        }
-        ajax.send();
+        });
     }
   
     // adiciona um novo usuario na tabela
