@@ -1,3 +1,4 @@
+
 class User{
 
     constructor(name, gender,birth, country, email, password, photo, admin){
@@ -95,7 +96,7 @@ class User{
                     this[name] = new Date(json[name]);
                 break;
                 default:
-                    this[name] =json[name];
+                    if(name.substring(0,1)=='_')    this[name] =json[name];
 
                 }
         }
@@ -122,33 +123,37 @@ class User{
         }
         return users;
     }
+    toJSON(){
+       
+        let json= {};   
+       
+        Object.keys(this).forEach(key=>{
+            if(this[key]!== undefined)json[key] = this[key];
+        });
+       
+        return json;
+    }
 
     save(){
-         
-        let users = User.getUsersStorage(); 
         
-       if(this.id > 0){
-       
-            users.map(u => {
-                if(u._id == this.id){
-                    
-                    Object.assign(u,this);
-                    console.log(this);
-                }
-                return u;
-            });
- 
-        } else {
-           
-            this._id = this.getNewID();
-            // colocar o json dentro de um array para poder salva-lo
-            users.push(this);
-       }
-        
+        return new Promise((resolve, reject)=>{
+            let promise;
+            if(this.id){
 
-        // nao salva objetos Json
-        //sessionStorage.setItem('users',JSON.stringify(users));
-        localStorage.setItem('users',JSON.stringify(users));
+                promise = HttpRequest.put(`/users/${this.id}`,this.toJSON());
+            } else {
+                console.log('hahahah');
+                promise = HttpRequest.post(`/users`,this.toJSON());
+            }
+            console.log(this.id);
+            promise.then(data=>{
+                this.loadFromJson(data);
+                resolve(this);
+            }).catch(e=>{
+                reject(e);
+            });
+        });
+        
     }
 
     remove(){

@@ -27,9 +27,8 @@ class HttpRequest{
             ajax.open(method.toUpperCase(),url);
 
             ajax.onerror = event =>{
-                reject(e);
+                reject(event);
             }
-
             ajax.onload = event =>{
         
                 let obj = {};
@@ -42,9 +41,8 @@ class HttpRequest{
                 }
                 resolve(obj);
             }
-
-            ajax.send();
-        
+            ajax.setRequestHeader('Content-type', 'application/json');
+            ajax.send(JSON.stringify(params));
         });
     }
 }

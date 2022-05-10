@@ -34,6 +34,7 @@ router.put('/:id', function(req, res, next) {
     res.json(obj);
   });
 });
+
 // DELETE user
 router.delete('/:id', function(req, res, next) {
 
@@ -46,7 +47,7 @@ router.delete('/:id', function(req, res, next) {
 
 router.post('/', function(req, res, next) {
 
-  client.post(`/users/${req.params.id}`, (err,request,response,obj)=>{
+  client.post(`/users/`,req.body, (err,request,response,obj)=>{
     assert.ifError(err);
 
     res.json(obj);
