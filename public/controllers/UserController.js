@@ -280,7 +280,9 @@ class UserController{
                 <button type="button" class="btn btn-danger btn-xs btn-delete btn-flat">Excluir</button>
             </td>
         `;
+
         this.addEventsTr(tr);
+        this.updateCount();
         return tr;
     }
 
